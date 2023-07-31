@@ -1,4 +1,5 @@
-GIT_HEAD_REF := $(shell git rev-parse HEAD)
+GIT_HEAD_REF := 6a252386bed6d4233f0f13f4562d8ae8608e7445
+# GIT_HEAD_REF := $(shell git rev-parse HEAD)
 
 BASE_IMAGE := pytorch/pytorch:1.9.0-cuda11.1-cudnn8-devel
 
@@ -178,6 +179,7 @@ serve: pull-eval-image
 		--mount type=bind,source=$(BASE_DIR)/database,target=/database \
 		--mount type=bind,source=$(BASE_DIR)/transformers_cache,target=/transformers_cache \
 		--mount type=bind,source=$(BASE_DIR)/configs,target=/app/configs \
+		--gpus all \
 		tscholak/$(EVAL_IMAGE_NAME):$(GIT_HEAD_REF) \
 		/bin/bash -c "python seq2seq/serve_seq2seq.py configs/serve.json"
 
